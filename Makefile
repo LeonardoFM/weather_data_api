@@ -12,7 +12,7 @@ PIP := pip install -r
 	pyenv local $(VENV_NAME)
 
 .pip:
-	pip install pip
+	pip install --upgrade pip
 
 setup: .pip
 	$(PIP) requirements.txt
@@ -40,3 +40,6 @@ setup: .pip
 clean: .clean-build .clean-pyc .clean-test
 
 create-venv: .create-venv setup
+
+test:
+	py.test --cov-report=term-missing  --cov-report=html --cov=.

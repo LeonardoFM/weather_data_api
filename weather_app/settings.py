@@ -11,6 +11,18 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from kombu import Exchange, Queue
+
+
+task_default_queue = 'weather_task'
+weather_task_exchange = Exchange('weather', type='direct')
+task_queues = (
+    Queue(
+        'weather_queue',
+        exchange=weather_task_exchange,
+        routing_key='data'
+    )
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
+    'django_celery_results',
+    'drf_yasg',
+    'rest_framework_swagger',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -123,3 +140,14 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+OPEN_WEATHER_URL = 'http://api.openweathermap.org/data/2.5/weather'
+OPEN_WEATHER_TOKEN = '3c3c035296f99b5ea679b457b66479a9'
+
+BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/London'

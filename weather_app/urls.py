@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
+
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+
+api_path = 'api/v1'
+
+schema_view = get_schema_view(
+    openapi.Info(title="Weather App", default_version='v1'),
+    public=True,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-docs/', schema_view.with_ui('swagger', cache_timeout=None), name='schema-swagger-ui'),
+    path(f'{api_path}/', include('app.urls', namespace='app'))
 ]
