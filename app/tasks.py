@@ -10,7 +10,7 @@ app.conf.beat_schedule = {
     'free-plan-routine': {
         # Task Name (Name Specified in Decorator)
         'task': 'weather app task',  
-        'schedule': 10.0
+        'schedule': 3600.0
     },
 } 
 
@@ -20,7 +20,7 @@ def list_weather_by_city_id_task(*args, **kwargs):
 
     weather_list = Weather.objects.filter(status='INACTIVE')
     if len(weather_list) > 60:
-        weather_list = weather_list[0: 2]
+        weather_list = weather_list[0: 60]
 
     ows = OpenWeatherService()
 
